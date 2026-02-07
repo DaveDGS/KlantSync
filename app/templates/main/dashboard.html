@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - KlantSync{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Hallo, {{ current_user.username }}</h1>
+    <a href="{{ url_for('projects.new_project') }}" class="btn btn-primary">+ Nieuw Project</a>
+</div>
+
+{% if projects %}
+    <div class="row">
+        {% for project in projects %}
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ project.project_name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ project.client_name }}</h6>
+                    <p class="card-text">{{ project.description[:100] }}...</p>
+                    <span class="badge bg-success">{{ project.status }}</span>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Aangemaakt: {{ project.created_at.strftime('%d-%m-%Y') }}</small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        <h4>Geen projecten gevonden</h4>
+        <p>Begin met het toevoegen van je eerste project!</p>
+    </div>
+{% endif %}
+{% endblock %}

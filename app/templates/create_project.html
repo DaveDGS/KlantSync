@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Nieuw Project - KlantSync</title>
+    <!-- We gebruiken hier bootstrap voor de layout, en jouw custom style -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body { background-color: #f8fafc; }
+        .card { border: none; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body>
+
+    <!-- Navigatie -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-3 mb-4">
+        <a class="navbar-brand fw-bold" href="/dashboard">KlantSync</a>
+        <a href="/dashboard" class="btn btn-sm btn-outline-secondary">Annuleren</a>
+    </nav>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                
+                <div class="card p-4">
+                    <h3 class="mb-4">Nieuw Project</h3>
+                    
+                    <!-- Weergeven van eventuele foutmeldingen of succesberichten -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <!-- Het formulier -->
+                    <form method="POST" action="/create-project">
+                        <div class="mb-3">
+                            <label class="form-label">Klantnaam</label>
+                            <input type="text" name="client_name" class="form-control" placeholder="Bijv. Bakkerij Jansen" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Projectnaam</label>
+                            <input type="text" name="project_name" class="form-control" placeholder="Bijv. Nieuwe Website" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Omschrijving</label>
+                            <textarea name="description" class="form-control" rows="3" placeholder="Korte beschrijving..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Project Aanmaken</button>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

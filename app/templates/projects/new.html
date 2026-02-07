@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %}Nieuw Project - KlantSync{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">Nieuw Project Aanmaken</h3>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" novalidate>
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        {{ form.client_name.label(class="form-label") }}
+                        {{ form.client_name(class="form-control" + (" is-invalid" if form.client_name.errors else ""), placeholder="Bijv. Bedrijf XYZ") }}
+                        {% if form.client_name.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.client_name.errors[0] }}
+                            </div>
+                        {% endif %}
+                        <small class="text-muted">Dit is de weergavenaam (kan bedrijfsnaam zijn)</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.project_name.label(class="form-label") }}
+                        {{ form.project_name(class="form-control" + (" is-invalid" if form.project_name.errors else ""), placeholder="Bijv. Website Redesign") }}
+                        {% if form.project_name.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.project_name.errors[0] }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.description.label(class="form-label") }}
+                        {{ form.description(class="form-control" + (" is-invalid" if form.description.errors else ""), rows=5, placeholder="Beschrijf het project...") }}
+                        {% if form.description.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.description.errors[0] }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.status.label(class="form-label") }}
+                        {{ form.status(class="form-select") }}
+                    </div>
+                    
+                    <hr class="my-4">
+                    <h5 class="mb-3">👤 Client Toewijzen</h5>
+                    
+                    <!-- Mode Selector -->
+                    <div class="mb-3">
+                        {{ form.client_mode.label(class="form-label") }}
+                        <div>
+                            {% for subfield in form.client_mode %}
+                                <div class="form-check form-check-inline">
+                                    {{ subfield(class="form-check-input") }}
+                                    {{ subfield.label(class="form-check-label") }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <!-- Bestaande Client Dropdown -->
+                    <div class="mb-3" id="existing-client-section">
+                        {{ form.existing_client_id.label(class="form-label") }}
+                        {{ form.existing_client_id(class="form-select") }}
+                        {% if my_clients|length == 0 %}
+                            <small class="text-muted">Je hebt nog geen clients. Nodig hieronder een nieuwe uit!</small>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Nieuwe Client Email -->
+                    <div class="mb-4" id="new-client-section" style="display: none;">
+                        {{ form.client_email.label(class="form-label") }}
+                        {{ form.client_email(class="form-control" + (" is-invalid" if form.client_email.errors else ""), 
+                                             placeholder="bijv. jan@bedrijfxyz.nl") }}
+                        {% if form.client_email.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.client_email.errors[0] }}
+                            </div>
+                        {% endif %}
+                        <small class="text-muted">
+                            💡 Deze client krijgt een uitnodiging en wordt automatisch gekoppeld aan dit project zodra de uitnodiging is geaccepteerd.
+                        </small>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary">Annuleren</a>
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Toggle tussen bestaande/nieuwe client
+document.addEventListener('DOMContentLoaded', function() {
+    const existingRadio = document.getElementById('client_mode-0');
+    const newRadio = document.getElementById('client_mode-1');
+    const existingSection = document.getElementById('existing-client-section');
+    const newSection = document.getElementById('new-client-section');
+    
+    function toggleSections() {
+        if (existingRadio.checked) {
+            existingSection.style.display = 'block';
+            newSection.style.display = 'none';
+        } else {
+            existingSection.style.display = 'none';
+            newSection.style.display = 'block';
+        }
+    }
+    
+    existingRadio.addEventListener('change', toggleSections);
+    newRadio.addEventListener('change', toggleSections);
+    
+    // Initial state
+    toggleSections();
+});
+</script>
+{% endblock %}

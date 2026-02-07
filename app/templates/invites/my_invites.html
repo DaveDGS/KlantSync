@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Mijn Uitnodigingen - KlantSync{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1>📧 Mijn Client Uitnodigingen</h1>
+    <p class="text-muted">Overzicht van verstuurde uitnodigingen</p>
+</div>
+
+<!-- Pending Invites -->
+<div class="card mb-4">
+    <div class="card-header bg-warning text-white">
+        <h5 class="mb-0">⏳ Pending Uitnodigingen ({{ pending|length }})</h5>
+    </div>
+    <div class="card-body">
+        {% if pending %}
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Project</th>
+                            <th>Verstuurd</th>
+                            <th>Verloopt</th>
+                            <th>Invite Link</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for invite in pending %}
+                        <tr>
+                            <td>{{ invite.email }}</td>
+                            <td>
+                                {% if invite.project %}
+                                    {{ invite.project.project_name }}
+                                {% else %}
+                                    <em>Geen specifiek project</em>
+                                {% endif %}
+                            </td>
+                            <td>{{ invite.created_at.strftime('%d-%m-%Y') }}</td>
+                            <td>{{ invite.expires_at.strftime('%d-%m-%Y') }}</td>
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" 
+                                           value="{{ request.url_root }}invites/accept/{{ invite.token }}" 
+                                           id="invite-{{ invite.id }}" readonly>
+                                    <button class="btn btn-outline-primary" type="button" 
+                                            onclick="copyInvite('invite-{{ invite.id }}')">
+                                        📋 Kopieer
+                                    </button>
+                                </div>
+                                <small class="text-muted">Stuur deze link naar je client</small>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-muted mb-0">Geen openstaande uitnodigingen</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Accepted Invites -->
+<div class="card">
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0">✅ Geaccepteerde Uitnodigingen</h5>
+    </div>
+    <div class="card-body">
+        {% if accepted %}
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Project</th>
+                            <th>Geaccepteerd</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for invite in accepted %}
+                        <tr>
+                            <td>{{ invite.email }}</td>
+                            <td>
+                                {% if invite.project %}
+                                    {{ invite.project.project_name }}
+                                {% else %}
+                                    <em>-</em>
+                                {% endif %}
+                            </td>
+                            <td>{{ invite.created_at.strftime('%d-%m-%Y') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-muted mb-0">Nog geen geaccepteerde uitnodigingen</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function copyInvite(elementId) {
+    const input = document.getElementById(elementId);
+    input.select();
+    document.execCommand('copy');
+    
+    // Visual feedback
+    const button = input.nextElementSibling;
+    const originalText = button.innerHTML;
+    button.innerHTML = '✅ Gekopieerd!';
+    button.classList.remove('btn-outline-primary');
+    button.classList.add('btn-success');
+    
+    setTimeout(() => {
+        button.innerHTML = originalText;
+        button.classList.remove('btn-success');
+        button.classList.add('btn-outline-primary');
+    }, 2000);
+}
+</script>
+{% endblock %}

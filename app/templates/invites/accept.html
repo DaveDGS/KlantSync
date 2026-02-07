@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Uitnodiging Accepteren - KlantSync{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-lg">
+            <div class="card-body p-5 text-center">
+                <div class="mb-4">
+                    <h2>🎉 Je bent Uitgenodigd!</h2>
+                    <p class="lead">{{ invite.freelancer.username }} nodigt je uit voor KlantSync</p>
+                </div>
+                
+                {% if invite.project %}
+                <div class="alert alert-info mb-4">
+                    <strong>📁 Project:</strong> {{ invite.project.project_name }}
+                </div>
+                {% endif %}
+                
+                <hr class="my-4">
+                
+                <h4 class="mb-3">Account Aanmaken</h4>
+                
+                <form method="POST" action="{{ url_for('invites.register_from_invite', token=invite.token) }}" novalidate>
+                    <div class="mb-3 text-start">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" value="{{ invite.email }}" disabled>
+                        <small class="text-muted">Dit email adres is aan jou gekoppeld</small>
+                    </div>
+                    
+                    <div class="mb-3 text-start">
+                        <label class="form-label">Gebruikersnaam</label>
+                        <input type="text" name="username" class="form-control" required 
+                               placeholder="Kies een gebruikersnaam" minlength="3">
+                    </div>
+                    
+                    <div class="mb-3 text-start">
+                        <label class="form-label">Wachtwoord</label>
+                        <input type="password" name="password" class="form-control" required 
+                               placeholder="Minimaal 8 karakters" minlength="8">
+                    </div>
+                    
+                    <div class="mb-4 text-start">
+                        <label class="form-label">Herhaal Wachtwoord</label>
+                        <input type="password" name="password2" class="form-control" required 
+                               placeholder="Herhaal wachtwoord" minlength="8">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                        Accepteer Uitnodiging & Maak Account
+                    </button>
+                </form>
+                
+                <hr class="my-4">
+                
+                <p class="text-muted mb-0">
+                    Heb je al een account? <a href="{{ url_for('auth.login') }}">Log in</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

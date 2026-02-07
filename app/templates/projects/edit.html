@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Bewerk Project - KlantSync{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">✏️ Project Bewerken</h3>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" novalidate>
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        {{ form.client_name.label(class="form-label") }}
+                        {{ form.client_name(class="form-control" + (" is-invalid" if form.client_name.errors else "")) }}
+                        {% if form.client_name.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.client_name.errors[0] }}
+                            </div>
+                        {% endif %}
+                        <small class="text-muted">Dit is de weergavenaam (kan bedrijfsnaam zijn)</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.project_name.label(class="form-label") }}
+                        {{ form.project_name(class="form-control" + (" is-invalid" if form.project_name.errors else "")) }}
+                        {% if form.project_name.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.project_name.errors[0] }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.description.label(class="form-label") }}
+                        {{ form.description(class="form-control" + (" is-invalid" if form.description.errors else ""), rows=5) }}
+                        {% if form.description.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.description.errors[0] }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.status.label(class="form-label") }}
+                        {{ form.status(class="form-select") }}
+                    </div>
+                    
+                    <div class="mb-4">
+                        {{ form.client_email.label(class="form-label") }}
+                        {{ form.client_email(class="form-control" + (" is-invalid" if form.client_email.errors else "")) }}
+                        {% if form.client_email.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.client_email.errors[0] }}
+                            </div>
+                        {% endif %}
+                        <small class="text-muted">
+                            💡 Huidige client: 
+                            {% if project.client %}
+                                <strong>{{ project.client.username }} ({{ project.client.email }})</strong>
+                            {% else %}
+                                <em>Geen client toegewezen</em>
+                            {% endif %}
+                        </small>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('projects.detail', project_id=project.id) }}" class="btn btn-secondary">Annuleren</a>
+                        {{ form.submit(class="btn btn-primary", value="Project Bijwerken") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Danger Zone -->
+        <div class="card border-danger mt-4">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">⚠️ Gevaarlijke Zone</h5>
+            </div>
+            <div class="card-body">
+                <p class="mb-3">
+                    <strong>Project Verwijderen</strong><br>
+                    <small class="text-muted">Dit verwijdert het project en alle updates permanent. Deze actie kan niet ongedaan gemaakt worden.</small>
+                </p>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    🗑️ Verwijder Project
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">⚠️ Project Verwijderen</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Weet je het zeker?</strong></p>
+                <p>Je staat op het punt om <strong>"{{ project.project_name }}"</strong> te verwijderen.</p>
+                <p class="text-danger mb-0">
+                    ⚠️ Dit verwijdert ook alle {{ project.updates.count() }} update(s) en kan niet ongedaan gemaakt worden.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuleren</button>
+                <form method="POST" action="{{ url_for('projects.delete_project', project_id=project.id) }}" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">Ja, Verwijder Definitief</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

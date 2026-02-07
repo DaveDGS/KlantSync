@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}{{ project.project_name }} - KlantSync{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <div class="d-flex justify-content-between align-items-start">
+    <div>
+        <h1>{{ project.project_name }}</h1>
+        <p class="text-muted">
+            <strong>Client:</strong> {{ project.client_name }} | 
+            <strong>Status:</strong> <span class="badge bg-{{ 'success' if project.status == 'actief' else 'secondary' }}">{{ project.status }}</span>
+        </p>
+    </div>
+    <div>
+        {% if current_user.is_freelancer() and project.freelancer_id == current_user.id %}
+            <a href="{{ url_for('projects.edit_project', project_id=project.id) }}" class="btn btn-outline-primary me-2">
+                ✏️ Bewerken
+            </a>
+        {% endif %}
+        <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-secondary">← Terug</a>
+    </div>
+</div>
+
+<!-- Project Beschrijving -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">📋 Project Beschrijving</h5>
+    </div>
+    <div class="card-body">
+        <p>{{ project.description }}</p>
+        <hr>
+        <div class="row">
+            <div class="col-md-6">
+                <small class="text-muted">
+                    <strong>Freelancer:</strong> {{ project.freelancer.username }}
+                </small>
+            </div>
+            <div class="col-md-6 text-end">
+                <small class="text-muted">
+                    <strong>Aangemaakt:</strong> {{ project.created_at.strftime('%d-%m-%Y %H:%M') }}
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Updates / Timeline -->
+<div class="card">
+    <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">💬 Updates & Communicatie</h5>
+        {% if current_user.is_freelancer() and project.freelancer_id == current_user.id %}
+            <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#addUpdateModal">
+                + Nieuwe Update
+            </button>
+        {% elif current_user.is_client() and project.client_id == current_user.id %}
+            <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#addUpdateModal">
+                + Reageren
+            </button>
+        {% endif %}
+    </div>
+    <div class="card-body">
+        {% if updates %}
+            <div class="timeline">
+                {% for update in updates %}
+                <div class="card mb-3 {% if update.author_id == current_user.id %}border-primary{% endif %}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <strong>
+                                    {% if update.author.is_freelancer() %}
+                                        👨‍💼 {{ update.author.username }}
+                                    {% else %}
+                                        👤 {{ update.author.username }}
+                                    {% endif %}
+                                </strong>
+                                {% if update.author.is_freelancer() %}
+                                    <span class="badge bg-primary">Freelancer</span>
+                                {% else %}
+                                    <span class="badge bg-success">Client</span>
+                                {% endif %}
+                            </div>
+                            <small class="text-muted">{{ update.created_at.strftime('%d-%m-%Y %H:%M') }}</small>
+                        </div>
+                        <p class="mb-0">{{ update.content }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info mb-0">
+                <p class="mb-0">📭 Nog geen updates. Plaats de eerste update om de communicatie te starten!</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal: Nieuwe Update -->
+<div class="modal fade" id="addUpdateModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">💬 Nieuwe Update Plaatsen</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="{{ url_for('projects.add_update', project_id=project.id) }}">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Bericht</label>
+                        <textarea name="content" class="form-control" rows="4" required 
+                                  placeholder="Deel een update, vraag, of opmerking..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuleren</button>
+                    <button type="submit" class="btn btn-primary">Plaatsen</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
