@@ -1,12 +1,3 @@
-del requirements.txt
-```
-
----
-
-### **Stap 2: Maak NIEUWE requirements (alleen productie packages)**
-
-Open Kladblok en plak **EXACT** dit:
-```
 blinker==1.9.0
 click==8.1.8
 dnspython==2.7.0
