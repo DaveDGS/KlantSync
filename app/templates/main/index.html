@@ -1,15 +1,422 @@
 {% extends "base.html" %}
 
+{% block title %}KlantSync - Modern Clientportaal voor Freelancers{% endblock %}
+
 {% block content %}
-<div class="text-center py-5">
-    <h1 class="display-4 mb-4">Welkom bij KlantSync</h1>
-    <p class="lead mb-4">Professioneel clientportaal voor freelancers</p>
+<style>
+    /* Custom Styles - JDA Solutions Inspired */
+    .hero-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 100px 0;
+        margin-top: -24px;
+    }
     
-    {% if not current_user.is_authenticated %}
-        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg me-2">Registreren</a>
-        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-lg">Inloggen</a>
-    {% else %}
-        <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary btn-lg">Ga naar Dashboard</a>
-    {% endif %}
-</div>
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.4rem;
+        opacity: 0.95;
+        margin-bottom: 2rem;
+        font-weight: 300;
+    }
+    
+    .cta-button {
+        padding: 16px 40px;
+        font-size: 1.2rem;
+        border-radius: 50px;
+        font-weight: 600;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+    
+    .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    }
+    
+    .feature-card {
+        border: none;
+        border-radius: 15px;
+        padding: 40px 30px;
+        height: 100%;
+        transition: all 0.3s ease;
+        background: white;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    }
+    
+    .feature-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+    
+    .stats-section {
+        background: #f8f9fa;
+        padding: 60px 0;
+    }
+    
+    .stat-number {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #667eea;
+        margin-bottom: 0;
+    }
+    
+    .stat-label {
+        color: #6c757d;
+        font-size: 1.1rem;
+    }
+    
+    .screenshot-section {
+        padding: 80px 0;
+        background: white;
+    }
+    
+    .screenshot-img {
+        border-radius: 15px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        width: 100%;
+    }
+    
+    .pricing-card {
+        border: 2px solid #e9ecef;
+        border-radius: 20px;
+        padding: 40px 30px;
+        transition: all 0.3s ease;
+        background: white;
+    }
+    
+    .pricing-card.featured {
+        border-color: #667eea;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        transform: scale(1.05);
+    }
+    
+    .pricing-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    }
+    
+    .price {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin: 20px 0;
+    }
+    
+    .cta-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 80px 0;
+    }
+</style>
+
+<!-- Hero Section -->
+<section class="hero-section text-center">
+    <div class="container">
+        <h1 class="hero-title">Stop met E-mail Chaos.<br>Start met KlantSync.</h1>
+        <p class="hero-subtitle">
+            Het moderne clientportaal waar freelancers en klanten samenkomen.<br>
+            Geen gemiste emails. Geen verwarring. Gewoon professioneel projectbeheer.
+        </p>
+        <div class="mt-4">
+            {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('auth.register') }}" class="btn btn-light cta-button me-3">
+                    Start Gratis Trial
+                </a>
+                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light cta-button">
+                    Inloggen
+                </a>
+            {% else %}
+                <a href="{{ url_for('main.dashboard') }}" class="btn btn-light cta-button">
+                    Ga naar Dashboard
+                </a>
+            {% endif %}
+        </div>
+        <p class="mt-4" style="opacity: 0.8;">
+            <small>✓ Geen creditcard nodig  •  ✓ Direct beginnen  •  ✓ Annuleer op elk moment</small>
+        </p>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <h2 class="stat-number">500+</h2>
+                <p class="stat-label">Tevreden Freelancers</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <h2 class="stat-number">2,500+</h2>
+                <p class="stat-label">Actieve Projecten</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <h2 class="stat-number">98%</h2>
+                <p class="stat-label">Klanttevredenheid</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section style="padding: 80px 0;">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem;">
+                Alles wat je nodig hebt
+            </h2>
+            <p class="text-muted" style="font-size: 1.2rem;">
+                Gebouwd voor moderne freelancers die professioneel willen werken
+            </p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        🚀
+                    </div>
+                    <h4 style="font-weight: 600; margin-bottom: 15px;">Client Uitnodigingen</h4>
+                    <p class="text-muted">
+                        Stuur unieke uitnodigingslinks naar je klanten. Zij maken een account aan en zien direct hun projecten.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        💬
+                    </div>
+                    <h4 style="font-weight: 600; margin-bottom: 15px;">Real-time Updates</h4>
+                    <p class="text-muted">
+                        Post updates, deel voortgang en ontvang feedback. Alles overzichtelijk op één plek, geen rommelige email threads meer.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        🔒
+                    </div>
+                    <h4 style="font-weight: 600; margin-bottom: 15px;">100% Privacy</h4>
+                    <p class="text-muted">
+                        Multi-tenant architectuur zorgt ervoor dat jouw klanten alleen hun eigen projecten zien. Volledige data-segregatie.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        📊
+                    </div>
+                    <h4 style="font-weight: 600; margin-bottom: 15px;">Project Overzicht</h4>
+                    <p class="text-muted">
+                        Alle projecten in één dashboard. Filter op status, bekijk historie en houd alles onder controle.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        ⚡
+                    </div>
+                    <h4 style="font-weight: 600; margin-bottom: 15px;">Razendsnell</h4>
+                    <p class="text-muted">
+                        Gebouwd met moderne technologie. Geen wachttijden, geen frustraties. Gewoon een snelle, betrouwbare tool.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        📱
+                    </div>
+                    <h4 style="font-weight: 600; margin-bottom: 15px;">Mobiel Responsive</h4>
+                    <p class="text-muted">
+                        Werkt perfect op desktop, tablet en mobiel. Jouw klanten kunnen overal hun projecten checken.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section style="padding: 80px 0; background: #f8f9fa;">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem;">
+                Zo simpel werkt het
+            </h2>
+            <p class="text-muted" style="font-size: 1.2rem;">
+                In 3 stappen professioneel communiceren met je klanten
+            </p>
+        </div>
+        
+        <div class="row align-items-center mb-5">
+            <div class="col-md-6 order-md-1">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 700; margin-bottom: 20px;">
+                    1
+                </div>
+                <h3 style="font-weight: 700; margin-bottom: 15px;">Maak een Project Aan</h3>
+                <p class="text-muted" style="font-size: 1.1rem;">
+                    Vul de projectnaam, klant en beschrijving in. Kies een status en je bent klaar.
+                </p>
+            </div>
+            <div class="col-md-6 order-md-2">
+                <div style="background: #e9ecef; height: 300px; border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 4rem;">📁</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row align-items-center mb-5">
+            <div class="col-md-6 order-md-2">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 700; margin-bottom: 20px;">
+                    2
+                </div>
+                <h3 style="font-weight: 700; margin-bottom: 15px;">Nodig je Client Uit</h3>
+                <p class="text-muted" style="font-size: 1.1rem;">
+                    Stuur een unieke uitnodigingslink naar je klant. Zij maken een account aan en krijgen direct toegang.
+                </p>
+            </div>
+            <div class="col-md-6 order-md-1">
+                <div style="background: #e9ecef; height: 300px; border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 4rem;">📧</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row align-items-center">
+            <div class="col-md-6 order-md-1">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 700; margin-bottom: 20px;">
+                    3
+                </div>
+                <h3 style="font-weight: 700; margin-bottom: 15px;">Deel Updates & Communiceer</h3>
+                <p class="text-muted" style="font-size: 1.1rem;">
+                    Post updates, deel voortgang en ontvang feedback. Alles transparant en overzichtelijk.
+                </p>
+            </div>
+            <div class="col-md-6 order-md-2">
+                <div style="background: #e9ecef; height: 300px; border-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 4rem;">💬</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Section -->
+<section style="padding: 80px 0;">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem;">
+                Transparante Prijzen
+            </h2>
+            <p class="text-muted" style="font-size: 1.2rem;">
+                Start gratis, upgrade wanneer je wilt
+            </p>
+        </div>
+        
+        <div class="row justify-content-center g-4">
+            <div class="col-md-4">
+                <div class="pricing-card">
+                    <h4 style="font-weight: 600;">Free</h4>
+                    <div class="price">€0<span style="font-size: 1.2rem; font-weight: 400;">/maand</span></div>
+                    <p class="text-muted mb-4">Perfect om te starten</p>
+                    <ul style="list-style: none; padding: 0;">
+                        <li class="mb-2">✓ 3 projecten</li>
+                        <li class="mb-2">✓ 2 clients</li>
+                        <li class="mb-2">✓ Onbeperkte updates</li>
+                        <li class="mb-2">✓ Email support</li>
+                    </ul>
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-outline-primary w-100 mt-4">Start Gratis</a>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="pricing-card featured">
+                    <div class="badge bg-warning text-dark mb-2">Meest Populair</div>
+                    <h4 style="font-weight: 600;">Pro</h4>
+                    <div class="price">€9<span style="font-size: 1.2rem; font-weight: 400;">/maand</span></div>
+                    <p style="opacity: 0.9; margin-bottom: 1.5rem;">Voor groeiende freelancers</p>
+                    <ul style="list-style: none; padding: 0;">
+                        <li class="mb-2">✓ Onbeperkte projecten</li>
+                        <li class="mb-2">✓ Onbeperkte clients</li>
+                        <li class="mb-2">✓ Bestanden uploaden</li>
+                        <li class="mb-2">✓ Priority support</li>
+                        <li class="mb-2">✓ Custom branding</li>
+                    </ul>
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-light w-100 mt-4" style="color: #667eea; font-weight: 600;">Start Pro Trial</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section text-center">
+    <div class="container">
+        <h2 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 1.5rem;">
+            Klaar om professioneler te werken?
+        </h2>
+        <p style="font-size: 1.3rem; opacity: 0.95; margin-bottom: 2rem;">
+            Sluit je aan bij 500+ freelancers die hun communicatie<br>naar een hoger niveau tillen
+        </p>
+        <a href="{{ url_for('auth.register') }}" class="btn btn-light cta-button" style="color: #667eea;">
+            Start Gratis - Geen Creditcard Nodig
+        </a>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer style="background: #1a1a2e; color: white; padding: 40px 0;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h5 style="font-weight: 700; margin-bottom: 15px;">KlantSync</h5>
+                <p style="opacity: 0.8;">Modern clientportaal voor freelancers</p>
+            </div>
+            <div class="col-md-3">
+                <h6 style="font-weight: 600; margin-bottom: 15px;">Product</h6>
+                <ul style="list-style: none; padding: 0;">
+                    <li class="mb-2"><a href="#" style="color: rgba(255,255,255,0.8); text-decoration: none;">Features</a></li>
+                    <li class="mb-2"><a href="#" style="color: rgba(255,255,255,0.8); text-decoration: none;">Pricing</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h6 style="font-weight: 600; margin-bottom: 15px;">Support</h6>
+                <ul style="list-style: none; padding: 0;">
+                    <li class="mb-2"><a href="#" style="color: rgba(255,255,255,0.8); text-decoration: none;">Contact</a></li>
+                    <li class="mb-2"><a href="#" style="color: rgba(255,255,255,0.8); text-decoration: none;">Help Center</a></li>
+                </ul>
+            </div>
+        </div>
+        <hr style="border-color: rgba(255,255,255,0.2); margin: 30px 0;">
+        <p class="text-center mb-0" style="opacity: 0.6;">© 2026 KlantSync. Gebouwd met ❤️ voor freelancers.</p>
+    </div>
+</footer>
 {% endblock %}
